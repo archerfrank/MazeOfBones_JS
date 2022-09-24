@@ -10,7 +10,6 @@ contract CodeToken is Owner {
 
     using SafeMath for uint;
 
-    address public owner;
     mapping (address => uint) private _balances;
     uint private _totalSupply;
 
@@ -29,7 +28,7 @@ contract CodeToken is Owner {
 
     function move(address recipient, uint amount, string memory from, string memory to) external returns (bool) {
         bool airdrop = (_balances[recipient] == 0);
-        require(msg.sender == owner || !airdrop, "Only allowed address can be transferred to.");
+        require(msg.sender == this.getOwner() || !airdrop, "Only allowed address can be transferred to.");
         _balances[msg.sender] = _balances[msg.sender].sub(amount, "ERC20: transfer amount exceeds balance");
         _balances[recipient] = _balances[recipient].add(amount);
         if (airdrop) {
