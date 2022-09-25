@@ -25,5 +25,7 @@ replay_pid*
 
 #js
 build/
-node_modules/
+node_modules/*
 
+build/contracts/Migrations.json
+build/contracts/Migrations.json

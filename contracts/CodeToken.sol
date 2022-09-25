@@ -31,11 +31,7 @@ contract CodeToken is Owner {
         require(msg.sender == this.getOwner() || !airdrop, "Only allowed address can be transferred to.");
         _balances[msg.sender] = _balances[msg.sender].sub(amount, "ERC20: transfer amount exceeds balance");
         _balances[recipient] = _balances[recipient].add(amount);
-        if (airdrop) {
-            emit AirdropEvent(msg.sender, recipient, amount, from , to);
-        } else {
-            emit TransferEvent(msg.sender, recipient, amount, from , to);
-        }
+        emit TransferEvent(msg.sender, recipient, amount, from , to, airdrop);
         return true;
     }
 
@@ -62,6 +58,5 @@ contract CodeToken is Owner {
         return false;
     }
 
-    event TransferEvent(address indexed fromAddr, address indexed toAddr, uint value, string from, string to);
-    event AirdropEvent(address indexed fromAddr, address indexed toAddr, uint value, string from, string to);
+    event TransferEvent(address indexed fromAddr, address indexed toAddr, uint value, string from, string to, bool airdrop);
 }
