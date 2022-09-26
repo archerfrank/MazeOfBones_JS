@@ -24,8 +24,5 @@ hs_err_pid*
 replay_pid*
 
 #js
-build/
 node_modules/*
 
-build/contracts/Migrations.json
-build/contracts/Migrations.json
