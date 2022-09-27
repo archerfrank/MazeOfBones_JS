@@ -4,7 +4,7 @@
     <div>
 
     </div>
-    <HelloWorld msg=" "/>
+    <HelloWorld  />
   </div>
 </template>
 

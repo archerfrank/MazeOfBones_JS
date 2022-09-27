@@ -1,0 +1,64 @@
+{
+    "_embedded" : {
+      "accounts" : [ {
+        "name" : "haojie",
+        "address" : "0x04b24c2d1cf75443a93e5031459ad2daf6210fcc",
+        "balance" : 300.00,
+        "lastUpdatedDate" : "2022-09-26T18:17:47.518",
+        "createdDate" : "2022-09-26T18:17:47.434",
+        "_links" : {
+          "self" : {
+            "href" : "http://localhost:8080/accounts/1"
+          },
+          "account" : {
+            "href" : "http://localhost:8080/accounts/1"
+          }
+        }
+      }, {
+        "name" : "xinhui",
+        "address" : "0x3d36853ab2e8975fa092d21605afae1ca99082f0",
+        "balance" : 600.00,
+        "lastUpdatedDate" : "2022-09-26T19:23:17.801",
+        "createdDate" : "2022-09-26T18:17:47.537",
+        "_links" : {
+          "self" : {
+            "href" : "http://localhost:8080/accounts/2"
+          },
+          "account" : {
+            "href" : "http://localhost:8080/accounts/2"
+          }
+        }
+      }, {
+        "name" : "Owner",
+        "address" : "0xfb7952df13212e47e33ae961610c4b19da895fa2",
+        "balance" : 19100.00,
+        "lastUpdatedDate" : "2022-09-26T19:23:17.798",
+        "createdDate" : "2022-09-26T18:17:38.524",
+        "_links" : {
+          "self" : {
+            "href" : "http://localhost:8080/accounts/101"
+          },
+          "account" : {
+            "href" : "http://localhost:8080/accounts/101"
+          }
+        }
+      } ]
+    },
+    "_links" : {
+      "self" : {
+        "href" : "http://localhost:8080/accounts"
+      },
+      "profile" : {
+        "href" : "http://localhost:8080/profile/accounts"
+      },
+      "search" : {
+        "href" : "http://localhost:8080/accounts/search"
+      }
+    },
+    "page" : {
+      "size" : 20,
+      "totalElements" : 3,
+      "totalPages" : 1,
+      "number" : 0
+    }
+  }

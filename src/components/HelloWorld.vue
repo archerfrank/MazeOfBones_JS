@@ -1,69 +1,119 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
+    <span>Welcome：{{username}} </span>
+      <br/>
+      <span>Address: {{ fromaddress }}</span>
+    <br/>
+    <span>Balance：{{ balance }}</span> <el-button  size="small"  @click="getnum"  plain>Refresh</el-button>
  
-    <el-button   @click="get" plain>addressid</el-button>
-    <el-button   @click="gethy" plain>getabi</el-button>
-    <el-button   @click="getnum" plain>balanceOf</el-button>
-    <el-button   @click="onmove" plain>move</el-button>
+  </div>
+  <br/>
+  <br/>
+  <div class="mt-4">
+    <span>Send</span>
+    <el-input placeholder="balance" v-model="sendnum"   oninput="value=value.replace(/[^0-9.]/g,'')" >
+  </el-input>
+  <span>To</span>
+  <el-select v-model="selectuser"   placeholder="Select">
+    <el-option
+      v-for="item in senduserlist"
+      :key="item.address"
+      :label="item.name"
+      :value="item.address">
+    </el-option>
+  </el-select>
+  <el-button   @click="onmove" plain>Submit</el-button>
   </div>
 </template>
 
-<script>
-  import Web3 from 'web3';
-  import axios from 'axios'
-  import abi from '../abi/CodeToken.json' 
  
-
+<script  >
+  import Web3 from 'web3';
+  //import axios from 'axios'
+  import abi from '../abi/CodeToken.json' 
+  import api from '../abi/api.json' 
+  
 export default {
   name: 'HelloWorld',
-  props: {
-    msg: String
-  },
   data() {
   return {
     fromaddress: '',
+    userlist: [],
+    senduserlist: [],
+    selectuser: '',
+    sendnum:'',
+    balance:'',
+    username:'',
   }
   },
   mounted() {
-    if(window.ethereum){
-        console.log ("metamask")
+      if(window.ethereum){
         window.ethereum.enable().then((res)=>{
           this.fromaddress=res[0];
-          console.log (res[0])})
-       
+          this.getnum();
+          this.userlist =this.getuserlist();
+        
+          for(let item in this.userlist){
+            if(this.userlist[item].address==this.fromaddress) 
+            {
+              this.username=this.userlist[item].name
+            }
+            else
+            {
+              this.senduserlist.push({name: this.userlist[item].name , address: this.userlist[item].address})
+            }
+          }
+        })
       }
       else
       {
-        console.log ("no metamask")
+        alert("no metamask");
       }
+
   },
   methods:{
-    get(){
-      alert(this.fromaddress);
-    },
-    gethy()
+    async getnum()
     {
-        axios.get("https://api-ropsten.etherscan.io/api?module=contract&action=getabi&address=0xa888Ad80b903FF9c8870474b0FB925Af6578D835&apikey=HQG2Y3ZTXKFZG7GREIQQP3SVHYV8T8P3AA")
-        .then(function (response) {
-            // handle success
-            console.log(response);
-          })
-    },
-    getnum()
-    {
+      let that=this
       var web3= web3 =new Web3(window.web3.currentProvider)
       let ethContract=new web3.eth.Contract(abi.abi,"0xcBCF8B1f24E8BEd6471Fa05E1B35053C3d99285B")
-      let balance =ethContract.methods.balanceOf(this.fromaddress).call()
-      console.log(balance);
+       ethContract.methods.balanceOf(this.fromaddress).call().then(function(result){that.balance=result})
     },
     onmove()
     {
+      let selectusername=''
+      let selectuseraddress=''
+      for(let item in this.senduserlist){
+        if(this.senduserlist[item].address==this.selectuser)
+        {
+          selectusername=this.senduserlist[item].name
+          selectuseraddress=this.senduserlist[item].address
+        }
+      }
+      if(this.sendnum=='')
+      {
+        alert("please input send number");
+        return
+      }
+      if(this.selectuser=='')
+      {
+        alert("please select user");
+        return
+      }
+      if(this.sendnum>this.balance)
+      {
+        alert("Insufficient balance");
+        return
+      }
       var web3= web3 =new Web3(window.web3.currentProvider)
       let ethContract=new web3.eth.Contract(abi.abi,"0xcBCF8B1f24E8BEd6471Fa05E1B35053C3d99285B")
-      let balance =ethContract.methods.move("0x3d36853ab2e8975fa092d21605afAe1ca99082F0", web3.utils.toWei('1', 'kwei'),"haojie","xinhui").send({from:this.fromaddress}) // call()
-      console.log(balance);
+      ethContract.methods.move(selectuseraddress, web3.utils.toWei(this.sendnum, 'wei'),this.username,selectusername).send({from:this.fromaddress}).then(this.getnum())
     },
+    getuserlist()
+    {
+      return  api._embedded.accounts
+    }
+ 
   },
 
 }
@@ -71,18 +121,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+ .el-input {
+  width: 400px
+ }
 </style>
