@@ -58,5 +58,9 @@ contract CodeToken is Owner {
         return false;
     }
 
+    function symbol() public view returns (string memory) {
+        return "SST3";
+    }
+
     event TransferEvent(address indexed fromAddr, address indexed toAddr, uint value, string from, string to, bool airdrop, uint time);
 }
